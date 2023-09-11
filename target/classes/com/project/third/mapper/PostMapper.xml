@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.project.third.mapper.PostMapper">
+	<!-- 게시글작성 -->  
+  	<insert id="insertPost" useGeneratedKeys="true" keyProperty="postId">
+  		insert into post (userId, boardId, title, context, createdate) 
+  		values(#{userId}, #{boardId},#{title}, #{context}, CURRENT_TIMESTAMP)
+  	</insert>
+  	
+  	<select id="getPostList" resultType="com.project.third.model.PostVO">
+  		SELECT postId, boardId, title, context, userId, CONVERT(CHAR(10), createdate, 23) as createdate
+  		FROM post
+  		order by postId desc  		
+		OFFSET #{param1} ROWS
+		FETCH NEXT 20 ROWS ONLY
+  	</select>
+  	
+  	<select id="getBoardPostList" resultType="com.project.third.model.PostVO">
+  		SELECT postId, boardId, title, context, userId, CONVERT(CHAR(10), createdate, 23) as createdate
+  		FROM post
+  		Where boardId = #{param1}
+  	</select>
+  	
+  	<select id="getBoardPostListPage" resultType="com.project.third.model.PostVO">
+  		SELECT postId, boardId, title, context, userId, CONVERT(CHAR(10), createdate, 23) as createdate
+  		FROM post
+  		WHERE boardId = #{param1}
+  		order by postId desc  		
+		OFFSET #{param2} ROWS
+		FETCH NEXT 20 ROWS ONLY
+  	</select>
+  	
+  	<select id="getPostDetail" resultType="com.project.third.model.PostVO">
+  		SELECT postId, boardId, title, context, userId, CONVERT(CHAR(10), createdate, 23) as createdate
+  		FROM post
+  		where postId = #{param1}
+  	</select>
+  	
+  	<delete id="deletePost">
+  		Delete FROM post
+  		where postId = #{param1}
+  	</delete>
+  	
+  	<update id="updatePost" parameterType="com.project.third.model.PostVO">
+	  	UPDATE post
+		SET title = #{title}, context = #{context}
+		WHERE postId = #{postId}
+	</update>
+	
+  	<select id="getCount" resultType="int">
+	 select count(postId) 
+	 from post
+	</select>
+	
+  	<select id="getBoardCount" resultType="int">
+	 select count(postId) 
+	 from post
+	 where boardId = #{param1}
+	</select>
+	
+	<select id="getBoardAuth" resultType="int">
+	 select auth
+	 from post
+	 where boardId = #{param1}
+	</select>
+  </mapper>

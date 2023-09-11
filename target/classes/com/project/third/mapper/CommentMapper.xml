@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.project.third.mapper.CommentMapper">
+	<!-- 회원가입 -->  
+  	<insert id="insertComment">
+  		insert into comment (context, postId, userid, createdate) 
+  		values(#{context}, #{postId},#{userId}, CURRENT_TIMESTAMP)
+  	</insert>
+  	
+  	<select id="getCommentList" resultType="com.project.third.model.CommentVO">
+  		SELECT commentId, context, postId, userid, CONVERT(nvarchar(50), createdate, 120) as createdate
+  		FROM comment
+  		WHERE postId = #{param1}
+  	</select>
+  	
+  	<delete id="deleteComment">
+  		delete FROM comment
+  		WHERE commentId = #{param1}
+  	</delete>	
+  </mapper>
